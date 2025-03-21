@@ -1,11 +1,11 @@
-package net.sigmachatguys;
+package net.sigmachatguys.sigmaclient;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Client
+public class SigmaClient
 {
     static Scanner scan = new Scanner(System.in);
     static Socket socketClient = null;

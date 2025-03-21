@@ -1,11 +1,11 @@
-package net.sigmachatguys;
+package net.sigmachatguys.sigmaserve;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Serve
+public class SigmaServe
 {
     static ServerSocket serveSocket = null;
     static Socket socketClient = null;
