@@ -1,5 +1,7 @@
 package net.sigmachatguys.guiscreen;
 
+import net.sigmachatguys.SigmaGeneralCommands;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,13 @@ public class SigmaMainConsole extends JFrame {
     private static String commandPrefix = "Sigma:";
 
 
-    public SigmaMainConsole() {
+    public SigmaMainConsole()
+    {
+        initializeComponents();
+    }
+
+    private void initializeComponents()
+    {
         setTitle("Simulador CMD com Obfuscação");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,19 +33,6 @@ public class SigmaMainConsole extends JFrame {
                 // Fundo preto tradicional do terminal
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, getWidth(), getHeight());
-
-                // Camada de obfuscação dinâmica
-                for (int i = 0; i < getWidth(); i += 40) {
-                    for (int j = 0; j < getHeight(); j += 40) {
-                        g.setColor(new Color(
-                                (int) (Math.random() * 255), // Cor aleatória (R)
-                                (int) (Math.random() * 255), // Cor aleatória (G)
-                                (int) (Math.random() * 255), // Cor aleatória (B)
-                                100 // Transparência
-                        ));
-                        g.fillRect(i, j, 20, 20); // Quadrados de obfuscação
-                    }
-                }
             }
         };
 
@@ -85,17 +80,23 @@ public class SigmaMainConsole extends JFrame {
         textArea.append("> " + command + "\n");
 
         // Comandos disponíveis
-        if (command.equalsIgnoreCase("help")) {
-            textArea.append("Comandos disponíveis:\n");
-            textArea.append("  - clear: Limpa o terminal\n");
-            textArea.append("  - exit: Fecha a aplicação\n");
-        } else if (command.equalsIgnoreCase("clear")) {
-            textArea.setText("");
-        } else if (command.equalsIgnoreCase("exit")) {
-            System.exit(0);
-        } else {
-            textArea.append("Comando desconhecido: " + command + "\n");
-        }
+       switch (command)
+       {
+           default:
+               textArea.append("> " + "Comando Inválido!" +"\n");
+           break;
+
+           case SigmaGeneralCommands.COMMAND_HELP:
+           break;
+           case SigmaGeneralCommands.COMMAND_GET_IP:
+           break;
+           case SigmaGeneralCommands.COMMAND_SET_IP:
+           break;
+           case SigmaGeneralCommands.COMMAND_GET_PORT:
+           break;
+           case SigmaGeneralCommands.COMMAND_SET_PORT:
+           break;
+       }
 
         // Rola automaticamente para o final do terminal
         textArea.setCaretPosition(textArea.getDocument().getLength());
