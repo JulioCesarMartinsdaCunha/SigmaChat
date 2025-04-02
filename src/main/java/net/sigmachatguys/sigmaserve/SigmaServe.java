@@ -1,5 +1,8 @@
 package net.sigmachatguys.sigmaserve;
 
+import net.sigmachatguys.guiscreen.SigmaMainConsole;
+import net.sigmachatguys.messagemanage.SMessageManage;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -53,23 +56,19 @@ public class SigmaServe
                 };
                 th.start();
 
+                SMessageManage mainManage = SigmaMainConsole.getMessageManage();
                 System.out.println("Cliente connectado!");
                 while(chatting)
                 {
-                    String msgEnviar = scan.nextLine();
-
-                    if(msgEnviar.equalsIgnoreCase("COMANDO-EXPULSAR"))
+                    if(mainManage.isHaveNewMessage())
                     {
-                        bw.write("Você foi expulso do chat!");
+                        String newMessage = mainManage.getLastMessage().getMessage();
+
+                        bw.write(newMessage);
                         bw.newLine();
                         bw.flush();
-                        chatting = false;
-                        break;
                     }
 
-                    bw.write(msgEnviar);
-                    bw.newLine();
-                    bw.flush();
                 }
             }
         } catch (IOException e) {
@@ -77,7 +76,7 @@ public class SigmaServe
         }
     }
 
-    public static void stopServe()
+    public static void commandStopServe()
     {
 
     }

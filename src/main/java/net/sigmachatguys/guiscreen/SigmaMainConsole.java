@@ -1,6 +1,7 @@
 package net.sigmachatguys.guiscreen;
 
 import net.sigmachatguys.SigmaGeneralCommands;
+import net.sigmachatguys.messagemanage.SMessageManage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,9 @@ public class SigmaMainConsole extends JFrame {
     private JTextField inputField;
     private static String commandPrefix = "Sigma:";
 
+    private static boolean linked = false;
+
+    private static SMessageManage messageManage = new SMessageManage();
 
     public SigmaMainConsole()
     {
@@ -64,7 +68,7 @@ public class SigmaMainConsole extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String command = inputField.getText();
                 inputField.setText(""); // Limpar o campo de entrada
-                processCommand(command);
+                processMessage(command);
             }
         });
 
@@ -73,6 +77,28 @@ public class SigmaMainConsole extends JFrame {
         obfuscationTimer.start();
 
         setVisible(true);
+    }
+        private long lastMessageTime = 0;
+    private void processMessage(String message)
+    {
+
+        if(message.isBlank())
+        {
+            return;
+        }
+        long tempodeEspera  =   System.currentTimeMillis();
+        if (tempodeEspera - lastMessageTime < 5000){
+            textArea.append("Aguarde...");
+            return;
+        }
+        messageManage.setNewMessage(message);
+
+        //Verifica se a mensagem que ele ta passando é um comando, por meio do prefixo determinado no SigmaGeneralCommands.
+        String[] args  = message.split(" ");
+        if(args[0].equals(SigmaGeneralCommands.PREFIX))
+        {
+            processCommand(message);
+        }
     }
 
     private void processCommand(String command) {
@@ -100,5 +126,10 @@ public class SigmaMainConsole extends JFrame {
 
         // Rola automaticamente para o final do terminal
         textArea.setCaretPosition(textArea.getDocument().getLength());
+    }
+
+    public static SMessageManage getMessageManage()
+    {
+        return messageManage;
     }
 }

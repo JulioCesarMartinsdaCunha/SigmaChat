@@ -1,5 +1,8 @@
 package net.sigmachatguys.sigmaclient;
 
+import net.sigmachatguys.guiscreen.SigmaMainConsole;
+import net.sigmachatguys.messagemanage.SMessageManage;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -26,17 +29,39 @@ public class SigmaClient
             BufferedWriter bw = new BufferedWriter(osw);
 
             connected = true;
+
+            Thread th = new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+
+                    while(connected)
+                    {
+                        try
+                        {
+                            String msgRecebida = br.readLine();
+                            System.out.println("Servidor: "+msgRecebida);
+                        }
+                        catch (IOException e)
+                        {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            };
+
+            SMessageManage mainManage = SigmaMainConsole.getMessageManage();
+
             System.out.println("Conectado!");
             while(connected)
             {
-                String msgEnviar = scan.nextLine();
-
-                bw.write(msgEnviar);
-                bw.newLine();
-                bw.flush();
-
-                String msgRecebida = br.readLine();
-                System.out.println("Servidor: "+msgRecebida);
+                if(mainManage.isHaveNewMessage())
+                {
+                    String message = mainManage.getLastMessage().getMessage();
+                    bw.write(message);
+                    bw.newLine();
+                    bw.flush();
+                }
             }
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -45,7 +70,7 @@ public class SigmaClient
         }
     }
 
-    public static void disconnect()
+    public static void commandDisconnect()
     {
 
     }
