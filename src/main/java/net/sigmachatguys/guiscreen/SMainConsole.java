@@ -8,18 +8,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SigmaMainConsole extends JFrame {
+public class SMainConsole extends JFrame {
     private JTextArea textArea;
     private JTextField inputField;
     private static String commandPrefix = "Sigma:";
 
-    private static boolean linked = false;
+    private boolean linked = false;
 
-    private static SMessageManage messageManage = new SMessageManage();
+    private SMessageManage messageManage = new SMessageManage();
 
-    public SigmaMainConsole()
+    public SMainConsole()
     {
         initializeComponents();
+        this.setVisible(true);
     }
 
     private void initializeComponents()
@@ -81,14 +82,13 @@ public class SigmaMainConsole extends JFrame {
         private long lastMessageTime = 0;
     private void processMessage(String message)
     {
-
         if(message.isBlank())
         {
             return;
         }
         long tempodeEspera  =   System.currentTimeMillis();
         if (tempodeEspera - lastMessageTime < 5000){
-            textArea.append("Aguarde...");
+            textArea.append("Aguarde..."+"\n");
             return;
         }
         messageManage.setNewMessage(message);
@@ -98,7 +98,10 @@ public class SigmaMainConsole extends JFrame {
         if(args[0].equals(SigmaGeneralCommands.PREFIX))
         {
             processCommand(message);
+            return;
         }
+        textArea.append("Você: " + message + "\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
     private void processCommand(String command) {
@@ -128,7 +131,20 @@ public class SigmaMainConsole extends JFrame {
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
-    public static SMessageManage getMessageManage()
+    public void sendMessageToTerminal(String message)
+    {
+        textArea.append("Outro Sigma: "+message+"\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength());
+    }
+
+    public void sendMessageToTerminal(String message, boolean messageServed)
+    {
+        String messageToSend = messageServed ? "[SERVER]: "+message : "Outro Sigma: "+message;
+        textArea.append(messageToSend+"\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength());
+    }
+
+    public SMessageManage getMessageManage()
     {
         return messageManage;
     }

@@ -1,6 +1,6 @@
 package net.sigmachatguys.sigmaserve;
 
-public class SigmaServeCommands
+public class SServeCommands
 {
     public static final String COMMAND_START_CHAT = "start-chat";
     public static final String COMMAND_STOP_CHAT = "stop-chat";

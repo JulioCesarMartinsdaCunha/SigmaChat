@@ -1,6 +1,6 @@
 package net.sigmachatguys.sigmaserve;
 
-import net.sigmachatguys.guiscreen.SigmaMainConsole;
+import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
 
 import java.io.*;
@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class SigmaServe
+public class SServe
 {
     static ServerSocket serveSocket = null;
     static Socket socketClient = null;
@@ -20,12 +20,12 @@ public class SigmaServe
 
     static int mainPort = 12345;
 
-    public static void initializeServe()
+    public static void initializeServe(SMainConsole mainConsole)
     {
         try
         {
             ServerSocket serverSocket = new ServerSocket(mainPort);
-            System.out.println("Servidor inicializado!");
+            mainConsole.sendMessageToTerminal("Servidor inicializado!", true);
             while(true)
             {
                 socketClient = serverSocket.accept();
@@ -45,8 +45,7 @@ public class SigmaServe
                             try
                             {
                                 String msgRecebida = br.readLine();
-                                System.out.println("Cliente: "+msgRecebida);
-
+                                mainConsole.sendMessageToTerminal(msgRecebida);
 
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -56,12 +55,13 @@ public class SigmaServe
                 };
                 th.start();
 
-                SMessageManage mainManage = SigmaMainConsole.getMessageManage();
-                System.out.println("Cliente connectado!");
+                SMessageManage mainManage = mainConsole.getMessageManage();
+                mainConsole.sendMessageToTerminal("Cliente connectado!", true);
                 while(chatting)
                 {
                     if(mainManage.isHaveNewMessage())
                     {
+                        System.out.println("Tem uma nova mensagem!");
                         String newMessage = mainManage.getLastMessage().getMessage();
 
                         bw.write(newMessage);

@@ -1,6 +1,6 @@
 package net.sigmachatguys.sigmaclient;
 
-import net.sigmachatguys.guiscreen.SigmaMainConsole;
+import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
 
 import java.io.*;
@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class SigmaClient
+public class SClient
 {
     static Scanner scan = new Scanner(System.in);
     static Socket socketClient = null;
@@ -17,7 +17,7 @@ public class SigmaClient
     static String mainIp = "localhost";
     static int mainPort = 12345;
 
-    public static void connect()
+    public static void connect(SMainConsole mainConsole)
     {
         try
         {
@@ -40,7 +40,7 @@ public class SigmaClient
                         try
                         {
                             String msgRecebida = br.readLine();
-                            System.out.println("Servidor: "+msgRecebida);
+                            mainConsole.sendMessageToTerminal(msgRecebida);
                         }
                         catch (IOException e)
                         {
@@ -50,14 +50,15 @@ public class SigmaClient
                 }
             };
 
-            SMessageManage mainManage = SigmaMainConsole.getMessageManage();
-
-            System.out.println("Conectado!");
+            SMessageManage mainManage = mainConsole.getMessageManage();
+            mainConsole.sendMessageToTerminal("Conectado!", true);
             while(connected)
             {
+
                 if(mainManage.isHaveNewMessage())
                 {
                     String message = mainManage.getLastMessage().getMessage();
+                    System.out.println("Nova mensagem!");
                     bw.write(message);
                     bw.newLine();
                     bw.flush();

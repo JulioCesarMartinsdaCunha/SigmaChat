@@ -1,11 +1,12 @@
 package net.sigmachatguys;
 
-import net.sigmachatguys.sigmaclient.SigmaClient;
+import net.sigmachatguys.guiscreen.SMainConsole;
+import net.sigmachatguys.sigmaclient.SClient;
 
 public class MainClient
 {
     public static void main(String[] args)
     {
-        SigmaClient.connect();
+        SClient.connect(new SMainConsole());
     }
 }

@@ -25,6 +25,7 @@ public class SMessageManage
                 newRawMessage = rawMessage;
             }
         }
+
         haveNewMessage = false;
         return newRawMessage;
     }
