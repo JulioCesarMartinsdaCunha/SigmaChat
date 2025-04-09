@@ -19,59 +19,62 @@ public class SClient
 
     public static void connect(SMainConsole mainConsole)
     {
-        try
-        {
-            socketClient = new Socket(mainIp, mainPort);
+        Thread principal = new Thread(() -> {
+            try
+            {
+                socketClient = new Socket(mainIp, mainPort);
 
-            InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
-            OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
-            BufferedReader br = new BufferedReader(isr);
-            BufferedWriter bw = new BufferedWriter(osw);
+                InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
+                OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
+                BufferedReader br = new BufferedReader(isr);
+                BufferedWriter bw = new BufferedWriter(osw);
 
-            connected = true;
+                connected = true;
 
-            Thread th = new Thread(){
-                @Override
-                public void run() {
+                Thread th = new Thread(){
+                    @Override
+                    public void run() {
 
-                    while(connected)
-                    {
-                        try
+                        while(connected)
                         {
-                            String msgRecebida = br.readLine();
-                            mainConsole.sendMessageToTerminal(msgRecebida);
-                        }
-                        catch (IOException e)
-                        {
-                            throw new RuntimeException(e);
+                            try
+                            {
+                                String msgRecebida = br.readLine();
+                                mainConsole.sendMessageToTerminal(msgRecebida);
+                            }
+                            catch (IOException e)
+                            {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
-                }
-            };
-            th.start();
+                };
+                th.start();
 
-            SMessageManage mainManage = mainConsole.getMessageManage();
-            mainConsole.sendMessageToTerminal("Conectado!", true);
-            while(connected)
-            {
-                if(mainManage.isHaveNewMessage())
+                SMessageManage mainManage = mainConsole.getMessageManage();
+                mainConsole.sendMessageToTerminal("Conectado!", true);
+                while(connected)
                 {
-                    String message = mainManage.getLastMessage().getMessage();
-                    System.out.println("Nova mensagem!");
-                    bw.write(message);
-                    bw.newLine();
-                    bw.flush();
+                    if(mainManage.isHaveNewMessage())
+                    {
+                        String message = mainManage.getLastMessage().getMessage();
+                        System.out.println("Nova mensagem!");
+                        bw.write(message);
+                        bw.newLine();
+                        bw.flush();
+                    }
+                    //1.3 NECESSARIES!
+                    Thread.sleep(100);
                 }
-                //1.3 NECESSARIES!
-                Thread.sleep(100);
+            } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        });
+        principal.start();
     }
 
     public static void commandDisconnect()

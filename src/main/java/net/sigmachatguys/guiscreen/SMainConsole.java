@@ -1,6 +1,6 @@
 package net.sigmachatguys.guiscreen;
 
-import net.sigmachatguys.SigmaGeneralCommands;
+import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.messagemanage.SMessageManage;
 import net.sigmachatguys.sigmaclient.SClient;
 import net.sigmachatguys.sigmaclient.SClientCommands;
@@ -95,39 +95,44 @@ public class SMainConsole extends JFrame {
             textArea.append("Aguarde..."+"\n");
             return;
         }
-        messageManage.setNewMessage(message);
 
         //Verifica se a mensagem que ele ta passando é um comando, por meio do prefixo determinado no SigmaGeneralCommands.
-        String[] args  = message.split(" ");
-        if(args[0].equals(SigmaGeneralCommands.PREFIX))
+        if(message.split(" ")[0].equals(SGeneralCommands.PREFIX))
         {
             processCommand(message);
             return;
         }
+        messageManage.setNewMessage(message);
+
         textArea.append("Você: " + message + "\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
-    private void processCommand(String command) {
+    private void processCommand(String message) {
         // Simula a execução de comandos no terminal
-        textArea.append("> " + command + "\n");
+        String[] args = message.split(" ");
+        textArea.append("> " + message + "\n");
 
         // Comandos disponíveis
-       switch (command)
+       switch (args[1])
        {
            default:
                textArea.append("> " + "Comando Inválido!" +"\n");
            break;
 
-           case SigmaGeneralCommands.COMMAND_HELP:
+           case SGeneralCommands.COMMAND_HELP:
            break;
-           case SigmaGeneralCommands.COMMAND_GET_IP:
+           case SGeneralCommands.COMMAND_GET_IP:
            break;
-           case SigmaGeneralCommands.COMMAND_SET_IP:
+           case SGeneralCommands.COMMAND_SET_IP:
            break;
-           case SigmaGeneralCommands.COMMAND_GET_PORT:
+           case SGeneralCommands.COMMAND_GET_PORT:
            break;
-           case SigmaGeneralCommands.COMMAND_SET_PORT:
+           case SGeneralCommands.COMMAND_SET_PORT:
+           break;
+           case SGeneralCommands.COMMAND_CLOSE:
+
+               System.exit(0);
            break;
 
            case SServeCommands.COMMAND_START_CHAT:

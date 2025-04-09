@@ -9,6 +9,6 @@ public class Main
 {
     public static void main(String[] args)
     {
-        SServe.initializeServe(new SMainConsole());
+        SMainConsole mainConsole = new SMainConsole();
     }
 }

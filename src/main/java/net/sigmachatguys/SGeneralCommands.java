@@ -1,6 +1,6 @@
 package net.sigmachatguys;
 
-public class SigmaGeneralCommands
+public class SGeneralCommands
 {
     public static final String COMMAND_SET_IP = "set-ip";
     public static final String COMMAND_SET_PORT = "set-port";
@@ -8,6 +8,8 @@ public class SigmaGeneralCommands
     public static final String COMMAND_GET_PORT = "get-port";
 
     public static final String COMMAND_HELP = "help";
+
+    public static final String COMMAND_CLOSE = "exit";
 
     public static final String PREFIX = "->";
 

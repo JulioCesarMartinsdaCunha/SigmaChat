@@ -22,61 +22,64 @@ public class SServe
 
     public static void initializeServe(SMainConsole mainConsole)
     {
-        try
-        {
-            ServerSocket serverSocket = new ServerSocket(mainPort);
-            mainConsole.sendMessageToTerminal("Servidor inicializado!", true);
-            while(true)
+        Thread principal = new Thread(() -> {
+            try
             {
-                socketClient = serverSocket.accept();
-                InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
-                OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
-                BufferedReader br = new BufferedReader(isr);
-                BufferedWriter bw = new BufferedWriter(osw);
+                ServerSocket serverSocket = new ServerSocket(mainPort);
+                mainConsole.sendMessageToTerminal("Servidor inicializado!", true);
+                while(true)
+                {
+                    socketClient = serverSocket.accept();
+                    InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
+                    OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
+                    BufferedReader br = new BufferedReader(isr);
+                    BufferedWriter bw = new BufferedWriter(osw);
 
-                chatting = true;
+                    chatting = true;
 
-                Thread th = new Thread(){
-                    @Override
-                    public void run()
-                    {
-                        while (chatting)
+                    Thread th = new Thread(){
+                        @Override
+                        public void run()
                         {
-                            try
+                            while (chatting)
                             {
-                                String msgRecebida = br.readLine();
-                                mainConsole.sendMessageToTerminal(msgRecebida);
+                                try
+                                {
+                                    String msgRecebida = br.readLine();
+                                    mainConsole.sendMessageToTerminal(msgRecebida);
 
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         }
-                    }
-                };
-                th.start();
+                    };
+                    th.start();
 
-                SMessageManage mainManage = mainConsole.getMessageManage();
-                mainConsole.sendMessageToTerminal("Cliente connectado!", true);
-                while(chatting)
-                {
-                    //System.out.println(mainManage.isHaveNewMessage());
-                    if(mainManage.isHaveNewMessage())
+                    SMessageManage mainManage = mainConsole.getMessageManage();
+                    mainConsole.sendMessageToTerminal("Cliente connectado!", true);
+                    while(chatting)
                     {
-                        String newMessage = mainManage.getLastMessage().getMessage();
-                        System.out.println("Tem uma nova mensagem: "+newMessage);
-                        bw.write(newMessage);
-                        bw.newLine();
-                        bw.flush();
+                        //System.out.println(mainManage.isHaveNewMessage());
+                        if(mainManage.isHaveNewMessage())
+                        {
+                            String newMessage = mainManage.getLastMessage().getMessage();
+                            System.out.println("Tem uma nova mensagem: "+newMessage);
+                            bw.write(newMessage);
+                            bw.newLine();
+                            bw.flush();
+                        }
+                        //1.3 NECESSARIES!
+                        Thread.sleep(100);
                     }
-                    //1.3 NECESSARIES!
-                    Thread.sleep(100);
                 }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        });
+        principal.start();
     }
 
     public static void commandStopServe()
