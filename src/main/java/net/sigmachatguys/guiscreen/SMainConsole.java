@@ -29,7 +29,7 @@ public class SMainConsole extends JFrame {
 
     private void initializeComponents()
     {
-        setTitle("Simulador CMD com Obfuscação");
+        setTitle("Sigma Chat BETA v1.3.0");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -140,6 +140,12 @@ public class SMainConsole extends JFrame {
            break;
            case SClientCommands.COMMAND_CONNECT_CHAT:
                SClient.connect(this);
+           break;
+           case SServeCommands.COMMAND_STOP_CHAT:
+                SServe.stopServe();
+           break;
+           case SClientCommands.COMMAND_DISCONNECT_CHAT:
+               SClient.disconnect();
            break;
        }
 

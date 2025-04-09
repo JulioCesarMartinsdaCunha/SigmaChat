@@ -26,8 +26,9 @@ public class SServe
             try
             {
                 ServerSocket serverSocket = new ServerSocket(mainPort);
+                serveOn = true;
                 mainConsole.sendMessageToTerminal("Servidor inicializado!", true);
-                while(true)
+                while(serveOn)
                 {
                     socketClient = serverSocket.accept();
                     InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
@@ -58,13 +59,12 @@ public class SServe
 
                     SMessageManage mainManage = mainConsole.getMessageManage();
                     mainConsole.sendMessageToTerminal("Cliente connectado!", true);
-                    while(chatting)
+                    while(chatting && !socketClient.isClosed())
                     {
-                        //System.out.println(mainManage.isHaveNewMessage());
                         if(mainManage.isHaveNewMessage())
                         {
                             String newMessage = mainManage.getLastMessage().getMessage();
-                            System.out.println("Tem uma nova mensagem: "+newMessage);
+                            //System.out.println("Tem uma nova mensagem: "+newMessage);
                             bw.write(newMessage);
                             bw.newLine();
                             bw.flush();
@@ -72,18 +72,36 @@ public class SServe
                         //1.3 NECESSARIES!
                         Thread.sleep(100);
                     }
+
+                    isr.close();
+                    osw.close();
+                    br.close();
+                    bw.close();
+                    socketClient.close();
+
+                    mainConsole.sendMessageToTerminal("Cliente desconectado!", true);
                 }
+                serverSocket.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            finally {
+                mainConsole.sendMessageToTerminal("Servidor encerrado!", true);
+            }
         });
         principal.start();
     }
 
-    public static void commandStopServe()
+    public static void stopServe()
     {
+        serveOn = false;
+        disconnect();
+    }
 
+    public static void disconnect()
+    {
+        chatting = false;
     }
 }

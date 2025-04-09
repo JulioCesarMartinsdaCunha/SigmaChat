@@ -58,7 +58,7 @@ public class SClient
                     if(mainManage.isHaveNewMessage())
                     {
                         String message = mainManage.getLastMessage().getMessage();
-                        System.out.println("Nova mensagem!");
+                        //System.out.println("Nova mensagem!");
                         bw.write(message);
                         bw.newLine();
                         bw.flush();
@@ -66,6 +66,14 @@ public class SClient
                     //1.3 NECESSARIES!
                     Thread.sleep(100);
                 }
+
+                isr.close();
+                osw.close();
+                br.close();
+                bw.close();
+                socketClient.close();
+                System.out.println("Terminou!");
+
             } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
@@ -73,12 +81,15 @@ public class SClient
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            finally {
+                mainConsole.sendMessageToTerminal("Conexão com o host finalizada!", true);
+            }
         });
         principal.start();
     }
 
-    public static void commandDisconnect()
+    public static void disconnect()
     {
-
+        connected = false;
     }
 }
