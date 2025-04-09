@@ -33,7 +33,6 @@ public class SClient
             Thread th = new Thread(){
                 @Override
                 public void run() {
-                    super.run();
 
                     while(connected)
                     {
@@ -49,12 +48,12 @@ public class SClient
                     }
                 }
             };
+            th.start();
 
             SMessageManage mainManage = mainConsole.getMessageManage();
             mainConsole.sendMessageToTerminal("Conectado!", true);
             while(connected)
             {
-
                 if(mainManage.isHaveNewMessage())
                 {
                     String message = mainManage.getLastMessage().getMessage();
@@ -63,10 +62,14 @@ public class SClient
                     bw.newLine();
                     bw.flush();
                 }
+                //1.3 NECESSARIES!
+                Thread.sleep(100);
             }
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

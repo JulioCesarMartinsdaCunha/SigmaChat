@@ -2,6 +2,10 @@ package net.sigmachatguys.guiscreen;
 
 import net.sigmachatguys.SigmaGeneralCommands;
 import net.sigmachatguys.messagemanage.SMessageManage;
+import net.sigmachatguys.sigmaclient.SClient;
+import net.sigmachatguys.sigmaclient.SClientCommands;
+import net.sigmachatguys.sigmaserve.SServe;
+import net.sigmachatguys.sigmaserve.SServeCommands;
 
 import javax.swing.*;
 import java.awt.*;
@@ -124,6 +128,13 @@ public class SMainConsole extends JFrame {
            case SigmaGeneralCommands.COMMAND_GET_PORT:
            break;
            case SigmaGeneralCommands.COMMAND_SET_PORT:
+           break;
+
+           case SServeCommands.COMMAND_START_CHAT:
+               SServe.initializeServe(this);
+           break;
+           case SClientCommands.COMMAND_CONNECT_CHAT:
+               SClient.connect(this);
            break;
        }
 

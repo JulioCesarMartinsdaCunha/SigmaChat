@@ -32,6 +32,7 @@ public class SMessageManage
 
     public SRawMessage getLastMessage()
     {
+        haveNewMessage = false;
         return messages.getLast();
     }
 

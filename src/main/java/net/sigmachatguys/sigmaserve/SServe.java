@@ -59,19 +59,22 @@ public class SServe
                 mainConsole.sendMessageToTerminal("Cliente connectado!", true);
                 while(chatting)
                 {
+                    //System.out.println(mainManage.isHaveNewMessage());
                     if(mainManage.isHaveNewMessage())
                     {
-                        System.out.println("Tem uma nova mensagem!");
                         String newMessage = mainManage.getLastMessage().getMessage();
-
+                        System.out.println("Tem uma nova mensagem: "+newMessage);
                         bw.write(newMessage);
                         bw.newLine();
                         bw.flush();
                     }
-
+                    //1.3 NECESSARIES!
+                    Thread.sleep(100);
                 }
             }
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
