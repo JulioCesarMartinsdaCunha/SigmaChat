@@ -1,5 +1,6 @@
 package net.sigmachatguys.sigmaclient;
 
+import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
 
@@ -23,7 +24,7 @@ public class SClient
             try
             {
                 socketClient = new Socket(mainIp, mainPort);
-
+                System.out.println("Teste!");
                 InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
                 OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
                 BufferedReader br = new BufferedReader(isr);
@@ -31,24 +32,28 @@ public class SClient
 
                 connected = true;
 
-                Thread th = new Thread(){
-                    @Override
-                    public void run() {
+                Thread th = new Thread(() -> {
 
-                        while(connected)
+                    while(connected)
+                    {
+                        try
                         {
-                            try
-                            {
-                                String msgRecebida = br.readLine();
-                                mainConsole.sendMessageToTerminal(msgRecebida);
+                            String msgRecebida = br.readLine();
+                            //if(msgRecebida.split(" ")[0].equals(SGeneralCommands.PREFIX)) mainConsole.processCommand(msgRecebida);
+                            if (msgRecebida== null){
+                                connected = false;
+                                break;
                             }
-                            catch (IOException e)
-                            {
-                                throw new RuntimeException(e);
-                            }
+                            mainConsole.sendMessageToTerminal(msgRecebida);
                         }
+                        catch (IOException e)
+                        {
+                            throw new RuntimeException(e);
+                        }
+                        break;
                     }
-                };
+
+                });
                 th.start();
 
                 SMessageManage mainManage = mainConsole.getMessageManage();
@@ -71,9 +76,9 @@ public class SClient
                 osw.close();
                 br.close();
                 bw.close();
+
                 socketClient.close();
                 System.out.println("Terminou!");
-
             } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

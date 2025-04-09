@@ -1,5 +1,6 @@
 package net.sigmachatguys.sigmaserve;
 
+import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
 
@@ -47,6 +48,7 @@ public class SServe
                                 try
                                 {
                                     String msgRecebida = br.readLine();
+                                    if(msgRecebida.split(" ")[0].equals(SGeneralCommands.PREFIX)) mainConsole.processCommand(msgRecebida);
                                     mainConsole.sendMessageToTerminal(msgRecebida);
 
                                 } catch (IOException e) {
@@ -59,7 +61,7 @@ public class SServe
 
                     SMessageManage mainManage = mainConsole.getMessageManage();
                     mainConsole.sendMessageToTerminal("Cliente connectado!", true);
-                    while(chatting && !socketClient.isClosed())
+                    while(chatting)
                     {
                         if(mainManage.isHaveNewMessage())
                         {
@@ -72,7 +74,7 @@ public class SServe
                         //1.3 NECESSARIES!
                         Thread.sleep(100);
                     }
-
+                    System.out.println("Disconectou!");
                     isr.close();
                     osw.close();
                     br.close();

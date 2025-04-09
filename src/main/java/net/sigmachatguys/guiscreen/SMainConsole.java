@@ -108,7 +108,7 @@ public class SMainConsole extends JFrame {
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
-    private void processCommand(String message) {
+    public void processCommand(String message) {
         // Simula a execução de comandos no terminal
         String[] args = message.split(" ");
         textArea.append("> " + message + "\n");
@@ -146,6 +146,7 @@ public class SMainConsole extends JFrame {
            break;
            case SClientCommands.COMMAND_DISCONNECT_CHAT:
                SClient.disconnect();
+               SServe.disconnect();
            break;
        }
 
