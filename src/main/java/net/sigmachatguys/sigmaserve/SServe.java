@@ -3,6 +3,7 @@ package net.sigmachatguys.sigmaserve;
 import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
+import net.sigmachatguys.sigmaclient.SClientCommands;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -48,7 +49,7 @@ public class SServe
                                 try
                                 {
                                     String msgRecebida = br.readLine();
-                                    if(msgRecebida.split(" ")[0].equals(SGeneralCommands.PREFIX)) mainConsole.processCommand(msgRecebida);
+                                    processCommandFromClient(msgRecebida);
                                     mainConsole.sendMessageToTerminal(msgRecebida);
 
                                 } catch (IOException e) {
@@ -61,7 +62,7 @@ public class SServe
 
                     SMessageManage mainManage = mainConsole.getMessageManage();
                     mainConsole.sendMessageToTerminal("Cliente connectado!", true);
-                    while(chatting)
+                    while(chatting && socketClient.isConnected())
                     {
                         if(mainManage.isHaveNewMessage())
                         {
@@ -79,7 +80,6 @@ public class SServe
                     osw.close();
                     br.close();
                     bw.close();
-                    socketClient.close();
 
                     mainConsole.sendMessageToTerminal("Cliente desconectado!", true);
                 }
@@ -94,6 +94,27 @@ public class SServe
             }
         });
         principal.start();
+    }
+
+    private static void processCommandFromClient(String command)
+    {
+        String[] args = command.split(" ");
+        if(!args[0].equals(SGeneralCommands.PREFIX))
+        {
+            return;
+        }
+        switch(args[1])
+        {
+            case SClientCommands.COMMAND_DISCONNECT_CHAT:
+                try
+                {
+                    socketClient.close();
+                    chatting = false;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+        }
     }
 
     public static void stopServe()

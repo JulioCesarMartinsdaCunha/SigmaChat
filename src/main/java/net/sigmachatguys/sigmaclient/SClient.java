@@ -3,6 +3,7 @@ package net.sigmachatguys.sigmaclient;
 import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
+import net.sigmachatguys.sigmaserve.SServeCommands;
 
 import java.io.*;
 import java.net.Socket;
@@ -40,10 +41,7 @@ public class SClient
                         {
                             String msgRecebida = br.readLine();
                             //if(msgRecebida.split(" ")[0].equals(SGeneralCommands.PREFIX)) mainConsole.processCommand(msgRecebida);
-                            if (msgRecebida== null){
-                                connected = false;
-                                break;
-                            }
+                            processCommandFromServe(msgRecebida);
                             mainConsole.sendMessageToTerminal(msgRecebida);
                         }
                         catch (IOException e)
@@ -77,7 +75,6 @@ public class SClient
                 br.close();
                 bw.close();
 
-                socketClient.close();
                 System.out.println("Terminou!");
             } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
@@ -91,6 +88,27 @@ public class SClient
             }
         });
         principal.start();
+    }
+
+    private static void processCommandFromServe(String command)
+    {
+        String[] args = command.split(" ");
+        if(!args[0].equals(SGeneralCommands.PREFIX))
+        {
+            return;
+        }
+        switch(args[1])
+        {
+            case SServeCommands.COMMAND_STOP_CHAT:
+                try
+                {
+                    socketClient.close();
+                    connected = false;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+        }
     }
 
     public static void disconnect()

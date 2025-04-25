@@ -108,10 +108,15 @@ public class SMainConsole extends JFrame {
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
-    public void processCommand(String message) {
+    private void processCommand(String message) {
         // Simula a execução de comandos no terminal
         String[] args = message.split(" ");
         textArea.append("> " + message + "\n");
+
+        if(args.length <= 1)
+        {
+            return;
+        }
 
         // Comandos disponíveis
        switch (args[1])
