@@ -161,12 +161,20 @@ public class SMainConsole extends JFrame {
 
     public void sendMessageToTerminal(String message)
     {
+        if (message == null)
+        {
+            return;
+        }
         textArea.append("Outro Sigma: "+message+"\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
     public void sendMessageToTerminal(String message, boolean messageServed)
     {
+        if (message == null)
+        {
+            return;
+        }
         String messageToSend = messageServed ? "[SERVER]: "+message : "Outro Sigma: "+message;
         textArea.append(messageToSend+"\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());

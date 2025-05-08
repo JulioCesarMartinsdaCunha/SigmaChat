@@ -19,6 +19,7 @@ public class SServe
     static boolean chatting = false;
 
     static Scanner scan = new Scanner(System.in);
+    static final String pingComan = ":ping:";
 
     static int mainPort = 12345;
 
@@ -48,10 +49,19 @@ public class SServe
                             {
                                 try
                                 {
+                                    System.out.println("Lendo...................!");
                                     String msgRecebida = br.readLine();
-                                    processCommandFromClient(msgRecebida);
-                                    mainConsole.sendMessageToTerminal(msgRecebida);
 
+                                    if(msgRecebida == null)
+                                    {
+                                        chatting = false;
+                                        return;
+                                    }
+
+                                    if(!msgRecebida.equals(pingComan))
+                                    {
+                                        mainConsole.sendMessageToTerminal(msgRecebida);
+                                    }
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -62,20 +72,24 @@ public class SServe
 
                     SMessageManage mainManage = mainConsole.getMessageManage();
                     mainConsole.sendMessageToTerminal("Cliente connectado!", true);
-                    while(chatting && socketClient.isConnected())
+                    while(chatting)
                     {
                         if(mainManage.isHaveNewMessage())
                         {
                             String newMessage = mainManage.getLastMessage().getMessage();
-                            //System.out.println("Tem uma nova mensagem: "+newMessage);
                             bw.write(newMessage);
+                            bw.newLine();
+                            bw.flush();
+                        }
+                        else
+                        {
+                            bw.write(pingComan);
                             bw.newLine();
                             bw.flush();
                         }
                         //1.3 NECESSARIES!
                         Thread.sleep(100);
                     }
-                    System.out.println("Disconectou!");
                     isr.close();
                     osw.close();
                     br.close();
@@ -85,7 +99,7 @@ public class SServe
                 }
                 serverSocket.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Teste!");
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

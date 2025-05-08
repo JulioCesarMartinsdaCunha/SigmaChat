@@ -16,6 +16,8 @@ public class SClient
     static Socket socketClient = null;
     static boolean connected = false;
 
+    static final String pingComan = ":ping:";
+
     static String mainIp = "localhost";
     static int mainPort = 12345;
 
@@ -25,7 +27,7 @@ public class SClient
             try
             {
                 socketClient = new Socket(mainIp, mainPort);
-                System.out.println("Teste!");
+
                 InputStreamReader isr = new InputStreamReader(socketClient.getInputStream());
                 OutputStreamWriter osw = new OutputStreamWriter(socketClient.getOutputStream());
                 BufferedReader br = new BufferedReader(isr);
@@ -39,18 +41,25 @@ public class SClient
                     {
                         try
                         {
+                            //FECHAR CONEXÃO COM O CLIENTE COMPLETA! FAZER FECHAR CONEXÃO FORÇADA DO SERVER!
                             String msgRecebida = br.readLine();
-                            //if(msgRecebida.split(" ")[0].equals(SGeneralCommands.PREFIX)) mainConsole.processCommand(msgRecebida);
-                            processCommandFromServe(msgRecebida);
-                            mainConsole.sendMessageToTerminal(msgRecebida);
+
+                            if(msgRecebida == null)
+                            {
+                                connected = false;
+                                return;
+                            }
+
+                            if(!msgRecebida.equals(pingComan))
+                            {
+                                mainConsole.sendMessageToTerminal(msgRecebida);
+                            }
                         }
                         catch (IOException e)
                         {
                             throw new RuntimeException(e);
                         }
-                        break;
                     }
-
                 });
                 th.start();
 
@@ -61,8 +70,13 @@ public class SClient
                     if(mainManage.isHaveNewMessage())
                     {
                         String message = mainManage.getLastMessage().getMessage();
-                        //System.out.println("Nova mensagem!");
                         bw.write(message);
+                        bw.newLine();
+                        bw.flush();
+                    }
+                    else
+                    {
+                        bw.write(pingComan);
                         bw.newLine();
                         bw.flush();
                     }
@@ -75,11 +89,11 @@ public class SClient
                 br.close();
                 bw.close();
 
-                System.out.println("Terminou!");
+                System.out.println("Saiu!");
             } catch (UnknownHostException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                mainConsole.sendMessageToTerminal("O host fechou a conexão!", true);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
