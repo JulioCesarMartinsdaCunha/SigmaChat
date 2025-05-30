@@ -1,5 +1,6 @@
 package net.sigmachatguys.sigmaserve;
 
+import net.sigmachatguys.Rsa_1;
 import net.sigmachatguys.SGeneralCommands;
 import net.sigmachatguys.guiscreen.SMainConsole;
 import net.sigmachatguys.messagemanage.SMessageManage;
@@ -49,7 +50,6 @@ public class SServe
                             {
                                 try
                                 {
-                                    System.out.println("Lendo...................!");
                                     String msgRecebida = br.readLine();
 
                                     if(msgRecebida == null)
@@ -77,6 +77,15 @@ public class SServe
                         if(mainManage.isHaveNewMessage())
                         {
                             String newMessage = mainManage.getLastMessage().getMessage();
+                            String criptoMessage = "";
+                            try
+                            {
+                                Rsa_1.Criptografar(newMessage);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new RuntimeException(e);
+                            }
                             bw.write(newMessage);
                             bw.newLine();
                             bw.flush();

@@ -7,8 +7,14 @@ import net.sigmachatguys.sigmaserve.SServe;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main
 {
+    private static SMainConsole mainConsole = null;
     public static void main(String[] args)
     {
-        SMainConsole mainConsole = new SMainConsole();
+        mainConsole = new SMainConsole();
+    }
+
+    public static SMainConsole getMainConsole()
+    {
+        return mainConsole;
     }
 }
