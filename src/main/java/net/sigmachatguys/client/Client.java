@@ -1,16 +1,16 @@
-package net.sigmachatguys.sigmaclient;
+package net.sigmachatguys.client;
 
-import net.sigmachatguys.SGeneralCommands;
-import net.sigmachatguys.guiscreen.SMainConsole;
-import net.sigmachatguys.messagemanage.SMessageManage;
-import net.sigmachatguys.sigmaserve.SServeCommands;
+import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.guiscreen.MainConsole;
+import net.sigmachatguys.messagemanage.MessageManage;
+import net.sigmachatguys.serve.ServeCommands;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class SClient
+public class Client
 {
     static Scanner scan = new Scanner(System.in);
     static Socket socketClient = null;
@@ -21,7 +21,7 @@ public class SClient
     static String mainIp = "localhost";
     static int mainPort = 12345;
 
-    public static void connect(SMainConsole mainConsole)
+    public static void connect(MainConsole mainConsole)
     {
         Thread principal = new Thread(() -> {
             try
@@ -63,7 +63,7 @@ public class SClient
                 });
                 th.start();
 
-                SMessageManage mainManage = mainConsole.getMessageManage();
+                MessageManage mainManage = mainConsole.getMessageManage();
                 mainConsole.sendMessageToTerminal("Conectado!", true);
                 while(connected)
                 {
@@ -107,13 +107,13 @@ public class SClient
     private static void processCommandFromServe(String command)
     {
         String[] args = command.split(" ");
-        if(!args[0].equals(SGeneralCommands.PREFIX))
+        if(!args[0].equals(GeneralCommands.PREFIX))
         {
             return;
         }
         switch(args[1])
         {
-            case SServeCommands.COMMAND_STOP_CHAT:
+            case ServeCommands.COMMAND_STOP_CHAT:
                 try
                 {
                     socketClient.close();

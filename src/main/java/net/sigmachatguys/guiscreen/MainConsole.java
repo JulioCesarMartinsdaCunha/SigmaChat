@@ -1,27 +1,27 @@
 package net.sigmachatguys.guiscreen;
 
-import net.sigmachatguys.SGeneralCommands;
-import net.sigmachatguys.messagemanage.SMessageManage;
-import net.sigmachatguys.sigmaclient.SClient;
-import net.sigmachatguys.sigmaclient.SClientCommands;
-import net.sigmachatguys.sigmaserve.SServe;
-import net.sigmachatguys.sigmaserve.SServeCommands;
+import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.messagemanage.MessageManage;
+import net.sigmachatguys.client.Client;
+import net.sigmachatguys.client.ClientCommands;
+import net.sigmachatguys.serve.Serve;
+import net.sigmachatguys.serve.ServeCommands;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SMainConsole extends JFrame {
+public class MainConsole extends JFrame {
     private JTextArea textArea;
     private JTextField inputField;
     private static String commandPrefix = "Sigma:";
 
     private boolean linked = false;
 
-    private SMessageManage messageManage = new SMessageManage();
+    private MessageManage messageManage = new MessageManage();
 
-    public SMainConsole()
+    public MainConsole()
     {
         initializeComponents();
         this.setVisible(true);
@@ -97,7 +97,7 @@ public class SMainConsole extends JFrame {
         }
 
         //Verifica se a mensagem que ele ta passando é um comando, por meio do prefixo determinado no SigmaGeneralCommands.
-        if(message.split(" ")[0].equals(SGeneralCommands.PREFIX))
+        if(message.split(" ")[0].equals(GeneralCommands.PREFIX))
         {
             processCommand(message);
             return;
@@ -125,33 +125,34 @@ public class SMainConsole extends JFrame {
                textArea.append("> " + "Comando Inválido!" +"\n");
            break;
 
-           case SGeneralCommands.COMMAND_HELP:
+           case GeneralCommands.COMMAND_HELP:
+               GeneralCommands.useHelp();
            break;
-           case SGeneralCommands.COMMAND_GET_IP:
+           case GeneralCommands.COMMAND_GET_IP:
            break;
-           case SGeneralCommands.COMMAND_SET_IP:
+           case GeneralCommands.COMMAND_SET_IP:
            break;
-           case SGeneralCommands.COMMAND_GET_PORT:
+           case GeneralCommands.COMMAND_GET_PORT:
            break;
-           case SGeneralCommands.COMMAND_SET_PORT:
+           case GeneralCommands.COMMAND_SET_PORT:
            break;
-           case SGeneralCommands.COMMAND_CLOSE:
+           case GeneralCommands.COMMAND_CLOSE:
 
                System.exit(0);
            break;
 
-           case SServeCommands.COMMAND_START_CHAT:
-               SServe.initializeServe(this);
+           case ServeCommands.COMMAND_START_CHAT:
+               Serve.initializeServe(this);
            break;
-           case SClientCommands.COMMAND_CONNECT_CHAT:
-               SClient.connect(this);
+           case ClientCommands.COMMAND_CONNECT_CHAT:
+               Client.connect(this);
            break;
-           case SServeCommands.COMMAND_STOP_CHAT:
-                SServe.stopServe();
+           case ServeCommands.COMMAND_STOP_CHAT:
+                Serve.stopServe();
            break;
-           case SClientCommands.COMMAND_DISCONNECT_CHAT:
-               SClient.disconnect();
-               SServe.disconnect();
+           case ClientCommands.COMMAND_DISCONNECT_CHAT:
+               Client.disconnect();
+               Serve.disconnect();
            break;
        }
 
@@ -180,7 +181,7 @@ public class SMainConsole extends JFrame {
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 
-    public SMessageManage getMessageManage()
+    public MessageManage getMessageManage()
     {
         return messageManage;
     }

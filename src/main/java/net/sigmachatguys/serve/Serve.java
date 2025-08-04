@@ -1,16 +1,16 @@
-package net.sigmachatguys.sigmaserve;
+package net.sigmachatguys.serve;
 
-import net.sigmachatguys.SGeneralCommands;
-import net.sigmachatguys.guiscreen.SMainConsole;
-import net.sigmachatguys.messagemanage.SMessageManage;
-import net.sigmachatguys.sigmaclient.SClientCommands;
+import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.guiscreen.MainConsole;
+import net.sigmachatguys.messagemanage.MessageManage;
+import net.sigmachatguys.client.ClientCommands;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class SServe
+public class Serve
 {
     static ServerSocket serveSocket = null;
     static Socket socketClient = null;
@@ -23,7 +23,7 @@ public class SServe
 
     static int mainPort = 12345;
 
-    public static void initializeServe(SMainConsole mainConsole)
+    public static void initializeServe(MainConsole mainConsole)
     {
         Thread principal = new Thread(() -> {
             try
@@ -49,7 +49,6 @@ public class SServe
                             {
                                 try
                                 {
-                                    System.out.println("Lendo...................!");
                                     String msgRecebida = br.readLine();
 
                                     if(msgRecebida == null)
@@ -70,7 +69,7 @@ public class SServe
                     };
                     th.start();
 
-                    SMessageManage mainManage = mainConsole.getMessageManage();
+                    MessageManage mainManage = mainConsole.getMessageManage();
                     mainConsole.sendMessageToTerminal("Cliente connectado!", true);
                     while(chatting)
                     {
@@ -113,13 +112,13 @@ public class SServe
     private static void processCommandFromClient(String command)
     {
         String[] args = command.split(" ");
-        if(!args[0].equals(SGeneralCommands.PREFIX))
+        if(!args[0].equals(GeneralCommands.PREFIX))
         {
             return;
         }
         switch(args[1])
         {
-            case SClientCommands.COMMAND_DISCONNECT_CHAT:
+            case ClientCommands.COMMAND_DISCONNECT_CHAT:
                 try
                 {
                     socketClient.close();

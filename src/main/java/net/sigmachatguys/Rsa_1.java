@@ -1,6 +1,6 @@
 package net.sigmachatguys;
 
-import net.sigmachatguys.messagemanage.SMessageManage;
+import net.sigmachatguys.messagemanage.MessageManage;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -8,7 +8,7 @@ import java.security.*;
 public class Rsa_1 {
 
     public static void main(String args[]) throws Exception {
-        SMessageManage mn = new SMessageManage();
+        MessageManage mn = new MessageManage();
 
         //Local de inserçãoda mensagem
 

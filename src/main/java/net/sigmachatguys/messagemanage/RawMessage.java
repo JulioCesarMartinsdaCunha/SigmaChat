@@ -1,11 +1,11 @@
 package net.sigmachatguys.messagemanage;
 
-public class SRawMessage
+public class RawMessage
 {
     private int id = 0;
     private String message = "";
 
-    public SRawMessage(int id, String message)
+    public RawMessage(int id, String message)
     {
         this.message = message;
         this.id = id;

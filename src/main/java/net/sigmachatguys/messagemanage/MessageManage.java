@@ -2,23 +2,23 @@ package net.sigmachatguys.messagemanage;
 
 import java.util.ArrayList;
 
-public class SMessageManage
+public class MessageManage
 {
-    final private ArrayList<SRawMessage> messages = new ArrayList<SRawMessage>();
+    final private ArrayList<RawMessage> messages = new ArrayList<RawMessage>();
     private boolean haveNewMessage = false;
 
 
     public void setNewMessage(String message)
     {
-        SRawMessage newMessage = new SRawMessage(messages.size(), message);
+        RawMessage newMessage = new RawMessage(messages.size(), message);
         messages.add(newMessage);
         haveNewMessage = true;
     }
 
-    public SRawMessage getMessage(int id)
+    public RawMessage getMessage(int id)
     {
-        SRawMessage newRawMessage = null;
-        for (SRawMessage rawMessage : messages)
+        RawMessage newRawMessage = null;
+        for (RawMessage rawMessage : messages)
         {
             if (rawMessage.getId() == id)
             {
@@ -30,7 +30,7 @@ public class SMessageManage
         return newRawMessage;
     }
 
-    public SRawMessage getLastMessage()
+    public RawMessage getLastMessage()
     {
         haveNewMessage = false;
         return messages.getLast();
