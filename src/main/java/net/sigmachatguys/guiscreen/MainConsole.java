@@ -1,6 +1,7 @@
 package net.sigmachatguys.guiscreen;
 
 import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.security.DigitalSignature;
 import net.sigmachatguys.messagemanage.MessageManage;
 import net.sigmachatguys.client.Client;
 import net.sigmachatguys.client.ClientCommands;
@@ -20,6 +21,8 @@ public class MainConsole extends JFrame {
     private boolean linked = false;
 
     private MessageManage messageManage = new MessageManage();
+
+    private long lastMessageTime = 0;
 
     public MainConsole()
     {
@@ -83,10 +86,9 @@ public class MainConsole extends JFrame {
 
         setVisible(true);
     }
-        private long lastMessageTime = 0;
-    private void processMessage(String message)
-    {
-        if(message.isBlank())
+
+    private void processMessage(String message){
+        if(message.isEmpty())
         {
             return;
         }
@@ -102,7 +104,19 @@ public class MainConsole extends JFrame {
             processCommand(message);
             return;
         }
+
+        //message
+        try
+        {
+            DigitalSignature.signMessage(message);
+        }
+        catch(Exception ex)
+        {
+
+        }
+
         messageManage.setNewMessage(message);
+
 
         textArea.append("Você: " + message + "\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());
@@ -126,7 +140,7 @@ public class MainConsole extends JFrame {
            break;
 
            case GeneralCommands.COMMAND_HELP:
-               GeneralCommands.useHelp();
+               GeneralCommands.useHelp(this);
            break;
            case GeneralCommands.COMMAND_GET_IP:
            break;

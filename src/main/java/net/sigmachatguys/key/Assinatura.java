@@ -1,4 +1,4 @@
-package net.sigmachatguys.kEY;
+package net.sigmachatguys.key;
 
 import java.security.*;
 
@@ -27,6 +27,8 @@ public class Assinatura {
     public byte[] assinarMensagem(String mensagem) throws Exception {//Colocar um timestamp para verificar o tempo de desbloqueio das mensagens
         sign.update(mensagem.getBytes());
         return sign.sign();
+
+
         //Assinar duplamente as mensagens e com od respectivos usuarios
         //após assinatura salvar em uma keystore as chaves
         //kestore temporaria
@@ -35,6 +37,7 @@ public class Assinatura {
     public boolean verificarAssinatura(String mensagem, byte[] assinatura) throws Exception {
         //Colocar um timestamp de verificação tempo medio apenas de 1 minuto no maximo para não haver altereções
         sign.initVerify(publi);
+        System.out.println("Verificação completa1");
         sign.update(mensagem.getBytes());
         return sign.verify(assinatura);
     }
