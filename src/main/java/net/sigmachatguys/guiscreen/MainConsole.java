@@ -1,12 +1,12 @@
 package net.sigmachatguys.guiscreen;
 
-import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.consolecommands.GeneralCommands;
 import net.sigmachatguys.security.DigitalSignature;
 import net.sigmachatguys.messagemanage.MessageManage;
 import net.sigmachatguys.client.Client;
-import net.sigmachatguys.client.ClientCommands;
+import net.sigmachatguys.consolecommands.ClientCommands;
 import net.sigmachatguys.serve.Serve;
-import net.sigmachatguys.serve.ServeCommands;
+import net.sigmachatguys.consolecommands.ServeCommands;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,6 +70,7 @@ public class MainConsole extends JFrame {
 
         add(mainPanel);
 
+
         // Listener para processar os comandos inseridos
         inputField.addActionListener(new ActionListener() {
             @Override
@@ -110,13 +111,12 @@ public class MainConsole extends JFrame {
         {
             DigitalSignature.signMessage(message);
         }
-        catch(Exception ex)
+        catch(Exception exception)
         {
 
         }
 
         messageManage.setNewMessage(message);
-
 
         textArea.append("Você: " + message + "\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());

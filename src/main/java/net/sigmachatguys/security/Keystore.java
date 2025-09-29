@@ -1,4 +1,4 @@
-package net.sigmachatguys.security;
+/*package net.sigmachatguys.security;
 import java.io.FileOutputStream;
 import java.security.*;
 import java.security.cert.Certificate;
@@ -17,3 +17,5 @@ public class Keystore {
 
 
 }
+
+ */

@@ -1,9 +1,10 @@
 package net.sigmachatguys.serve;
 
-import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.consolecommands.GeneralCommands;
+import net.sigmachatguys.Main;
 import net.sigmachatguys.guiscreen.MainConsole;
 import net.sigmachatguys.messagemanage.MessageManage;
-import net.sigmachatguys.client.ClientCommands;
+import net.sigmachatguys.consolecommands.ClientCommands;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -23,8 +24,9 @@ public class Serve
 
     static int mainPort = 12345;
 
-    public static void initializeServe(MainConsole mainConsole)
+    public static void initializeServe()
     {
+        MainConsole mainConsole = Main.getMainConsole();
         Thread principal = new Thread(() -> {
             try
             {

@@ -2,10 +2,13 @@ package net.sigmachatguys.security;
 
 import net.sigmachatguys.messagemanage.MessageManage;
 import java.security.*;
+import java.util.Base64;
 import java.util.Date;
 import java.time.Instant;
+import net.sigmachatguys.security.SignMessage;
 
 public class DigitalSignature {
+
 
     private static KeyPair generateKeyPairWithRSA(int keySize) throws NoSuchAlgorithmException 
     {
@@ -14,47 +17,43 @@ public class DigitalSignature {
         return keyPairGenerator.generateKeyPair();
     }
 
-    public static void signMessage sign(String message)  throws Exception
-    {
+    public static SignMessage signMessage(String message, PrivateKey privateKey) throws Exception {
         //Local de inserçãoda mensagem
         long timestamp = Instant.now().toEpochMilli();
         String userMenssage = message;
         String messageWithTime = message + "|" + timestamp;
-
-
-        //Assinatura
-        Signature signature =  Signature.getInstance("SHA256withRSA");
-
-        //Inicliaziando a com a chave privada
-        signature.initSign(pv);
-
-        //Criando a assinatura dos bytes da menssagem
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
         signature.update(messageWithTime.getBytes());
-
-        long expirationTimems = 5 * 60 * 1000; // minutos para milisegundos
-        Long now  = Instant.now().toEpochMilli();
-        
-        if (now - timestamp > expirationTimems){
-            System.out.println("Tempo de verificação excedido verifique sua conexão;");
-            return;
-        }
-
         byte[] assinatura = signature.sign();
 
-        //Verficação
-        signature.initVerify(pk);
+        return new SignMessage(message, timestamp, Base64.getEncoder().encodeToString(assinatura));
+    }
+
+
+    public static boolean verifyMessage(SignMessage signMessage, PublicKey publicKey, long expirationMs) throws Exception {
+        long now = Instant.now().toEpochMilli();
+        long timestamp = signMessage.timestamp;
+        String messageWithTime = signMessage.message + "|" + timestamp;
+
+        if (now - timestamp > expirationMs) {
+            System.out.println(" Tempo de verificação excedido. Verifique sua conexão.");
+            return false;
+        }
+
+
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initVerify(publicKey);
         signature.update(messageWithTime.getBytes());
-        boolean verifi = signature.verify(assinatura);
+        byte[] signatureBytes = Base64.getDecoder().decode(signMessage.signature);
+        boolean verifi = signature.verify(signatureBytes);
 
         if (verifi){
             System.out.println("Assinatura visualizada e confirmada");
         }else {
             System.out.println("Mensagem alterada");
         }
-    }
-
-    public static boolean verifyMessage(String message, byte[] bytes)
-    {
-
+        return verifi;
     }
 }
+

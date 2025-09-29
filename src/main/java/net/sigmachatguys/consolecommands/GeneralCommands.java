@@ -1,8 +1,6 @@
-package net.sigmachatguys;
+package net.sigmachatguys.consolecommands;
 
-import net.sigmachatguys.client.ClientCommands;
 import net.sigmachatguys.guiscreen.MainConsole;
-import net.sigmachatguys.serve.ServeCommands;
 
 public class GeneralCommands
 {

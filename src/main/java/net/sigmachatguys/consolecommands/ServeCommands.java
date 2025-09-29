@@ -1,4 +1,4 @@
-package net.sigmachatguys.serve;
+package net.sigmachatguys.consolecommands;
 
 public class ServeCommands
 {

@@ -1,9 +1,10 @@
 package net.sigmachatguys.client;
 
-import net.sigmachatguys.GeneralCommands;
+import net.sigmachatguys.consolecommands.GeneralCommands;
+import net.sigmachatguys.Main;
 import net.sigmachatguys.guiscreen.MainConsole;
 import net.sigmachatguys.messagemanage.MessageManage;
-import net.sigmachatguys.serve.ServeCommands;
+import net.sigmachatguys.consolecommands.ServeCommands;
 
 import java.io.*;
 import java.net.Socket;
@@ -21,8 +22,10 @@ public class Client
     static String mainIp = "localhost";
     static int mainPort = 12345;
 
-    public static void connect(MainConsole mainConsole)
+    public static void connect()
     {
+        MainConsole mainConsole = Main.getMainConsole();
+
         Thread principal = new Thread(() -> {
             try
             {

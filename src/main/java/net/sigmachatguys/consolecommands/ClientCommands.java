@@ -1,4 +1,4 @@
-package net.sigmachatguys.client;
+package net.sigmachatguys.consolecommands;
 
 public class ClientCommands
 {
